@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Messages</title>
+  </head>
+  <body>
+    <%- include("navbar.ejs") %>
+    <main class="app-main">
+      <header class="page-header">
+        <div class="page-title-row">
+          <span class="page-title-mark" aria-hidden="true">
+            <i data-lucide="lock-keyhole" class="icon" aria-hidden="true"></i>
+          </span>
+          <div>
+            <h1 class="page-title">Messages</h1>
+            <p class="page-summary">
+              <%= messages.length %> <%= messages.length === 1 ? "message" : "messages" %>
+              on the clubhouse board
+            </p>
+          </div>
+        </div>
+        <% if (user) { %>
+        <a href="/add-msg" class="button-secondary page-action">
+          <i data-lucide="square-pen" class="icon" aria-hidden="true"></i>
+          Add Message
+        </a>
+        <% } %>
+      </header>
+      <%- include("errors.ejs") %>
+      <div class="message-list">
+        <% if(messages.length){ %> <% messages.forEach((msg) => { %>
+        <%- include("msgCard.ejs", {user, msg}) %>
+        <% }) %>
+        <% } else { %>
+        <p class="empty-state">
+          <i data-lucide="message-square" class="icon" aria-hidden="true"></i>
+          No messages yet.
+        </p>
+        <% } %>
+      </div>
+    </main>
+    <%- include("lucide.ejs") %>
+  </body>
+</html>

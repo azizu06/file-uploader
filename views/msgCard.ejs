@@ -1,0 +1,55 @@
+<%
+  const canSeeMessageMeta = user?.is_member;
+  const formattedDate = new Date(msg.created_at).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+%>
+
+<article class="message-card">
+  <div>
+    <p class="message-avatar">
+      <%= (msg.first_name.charAt(0)+msg.last_name.charAt(0)).toUpperCase() %>
+    </p>
+  </div>
+  <div class="message-content">
+    <div class="message-title-row">
+      <h2 class="message-title"><%= msg.title %></h2>
+      <% if(user?.is_admin){ %>
+      <form
+        action="/msg/<%= msg.id %>/delete"
+        method="post"
+        class="delete-form"
+        onsubmit="
+          return confirm('Delete this message? This cannot be undone.');
+        "
+      >
+        <button type="submit" class="button-danger">
+          <i data-lucide="trash-2" class="icon" aria-hidden="true"></i>
+          Delete
+        </button>
+      </form>
+      <% } %>
+    </div>
+    <p class="message-text"><%= msg.text %></p>
+    <div class="message-meta">
+      <p class="meta-item">
+        <i data-lucide="user" class="icon" aria-hidden="true"></i>
+        <span class="meta-label">From</span>
+        <span class="meta-value">
+          <%= user?.is_member ? msg.first_name + " " + msg.last_name : "*****" %>
+        </span>
+      </p>
+      <p class="meta-item">
+        <i data-lucide="clock" class="icon" aria-hidden="true"></i>
+        <span class="meta-label">Sent</span>
+        <span class="meta-value">
+          <%= canSeeMessageMeta ? formattedDate : "*****" %>
+        </span>
+      </p>
+    </div>
+  </div>
+</article>

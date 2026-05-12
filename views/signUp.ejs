@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <%- include("navbar.ejs") %>
+    <main class="app-main app-main-narrow">
+      <h1 class="page-title">Sign Up</h1>
+      <%- include("errors.ejs") %>
+      <div class="form-panel">
+        <form action="/sign-up" method="post" class="form-stack">
+          <div class="field-group">
+            <label for="firstName" class="field-label">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              id="firstName"
+              class="text-field"
+              value="<%= locals.old ? old.firstName : '' %>"
+              required
+            />
+          </div>
+          <div class="field-group">
+            <label for="lastName" class="field-label">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              id="lastName"
+              class="text-field"
+              value="<%= locals.old ? old.lastName : '' %>"
+              required
+            />
+          </div>
+          <div class="field-group">
+            <label for="username" class="field-label">Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              class="text-field"
+              value="<%= locals.old ? old.username : '' %>"
+              required
+            />
+          </div>
+          <div class="field-group">
+            <label for="password" class="field-label">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              class="text-field"
+              required
+            />
+          </div>
+          <div class="field-group">
+            <label for="confirmPassword" class="field-label"
+              >Confirm Password</label
+            >
+            <input
+              type="password"
+              name="confirmPassword"
+              id="confirmPassword"
+              class="text-field"
+              required
+            />
+          </div>
+          <button type="submit" class="button-primary">
+            <i data-lucide="user-plus" class="icon" aria-hidden="true"></i>
+            Sign Up
+          </button>
+        </form>
+        <div class="form-footer">
+          <p>Already have an account?</p>
+          <a href="/login" class="text-link">
+            <i data-lucide="log-in" class="icon" aria-hidden="true"></i>
+            Login
+          </a>
+        </div>
+      </div>
+    </main>
+    <%- include("lucide.ejs") %>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+{
+  "name": "members-only",
+  "version": "1.0.0",
+  "description": "Members-only clubhouse app with Express, EJS, Passport, and PostgreSQL",
+  "main": "app.js",
+  "scripts": {
+    "start": "node routes/app.js",
+    "db:init": "node db/init.js",
+    "dev:server": "nodemon routes/app.js",
+    "build:css": "tailwindcss -i ./src/input.css -o ./public/styles.css",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch",
+    "dev": "concurrently \"npm run dev:server\" \"npm run watch:css\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azizu06/members-only.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/azizu06/members-only/issues"
+  },
+  "homepage": "https://github.com/azizu06/members-only#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.10",
+    "prettier": "^3.8.3",
+    "prettier-plugin-ejs": "^1.0.3",
+    "tailwindcss": "^4.2.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "concurrently": "^9.2.1",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^5.0.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.2",
+    "lucide-react": "^1.8.0",
+    "nodemon": "^3.1.14",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.20.0"
+  }
+}

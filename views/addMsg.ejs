@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Add Message</title>
+  </head>
+  <body>
+    <%- include("navbar.ejs") %>
+    <main class="app-main app-main-narrow">
+      <h1 class="page-title">Add Message</h1>
+      <%- include("errors.ejs") %>
+      <div class="form-panel">
+        <form action="/add-msg" method="post" class="form-stack">
+          <div class="field-group">
+            <label for="title" class="field-label">Title</label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              class="text-field"
+              value="<%= locals.old ? old.title : '' %>"
+              required
+            />
+          </div>
+          <div class="field-group">
+            <label for="message" class="field-label">Message</label>
+            <textarea name="message" id="message" class="text-field" required><%= locals.old ? old.message : '' %></textarea>
+          </div>
+          <button type="submit" class="button-primary">
+            <i data-lucide="send" class="icon" aria-hidden="true"></i>
+            Send
+          </button>
+        </form>
+        <div class="form-footer">
+          <a href="/" class="text-link">
+            <i data-lucide="arrow-left" class="icon" aria-hidden="true"></i>
+            Go to Dashboard
+          </a>
+        </div>
+      </div>
+    </main>
+    <%- include("lucide.ejs") %>
+  </body>
+</html>
