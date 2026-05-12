@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "File uploader app",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "node routes/app.js",
     "db:init": "node db/init.js",
@@ -18,7 +19,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/azizu06/file-uploader/issues"
   },
