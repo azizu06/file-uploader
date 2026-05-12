@@ -1,1 +1,1 @@
-Building exclusive clubhouse where your members can write anonymous posts to practice authentication skills.
+Creating a personal storage device to learn more about Prisma ORM.
