@@ -1,7 +1,7 @@
 {
-  "name": "members-only",
+  "name": "file-uploader",
   "version": "1.0.0",
-  "description": "Members-only clubhouse app with Express, EJS, Passport, and PostgreSQL",
+  "description": "File uploader app",
   "main": "app.js",
   "scripts": {
     "start": "node routes/app.js",
@@ -13,16 +13,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/azizu06/members-only.git"
+    "url": "git+https://github.com/azizu06/file-uploader.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/azizu06/members-only/issues"
+    "url": "https://github.com/azizu06/file-uploader/issues"
   },
-  "homepage": "https://github.com/azizu06/members-only#readme",
+  "homepage": "https://github.com/azizu06/file-uploader#readme",
   "devDependencies": {
     "@tailwindcss/cli": "^4.2.2",
     "autoprefixer": "^10.5.0",
