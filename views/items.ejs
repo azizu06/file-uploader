@@ -5,4 +5,27 @@
     <p>></p>
   </div>
   <% }) %>
+  <div class="flex justify-center gap-5">
+    <a href="/folders/<%= folder.id %>?sort=name&dir=asc">Name</a>
+    <a href="/folders/<%= folder.id %>?sort=size&dir=asc">Size</a>
+    <a href="/folders/<%= folder.id %>?sort=date&dir=asc">Date Added</a>
+  </div>
+  <div class="flex flex-col gap-2 w-full">
+    <% folder.children.forEach((child) => { %>
+    <a href="/folders/<%= folder.id %>">
+      <div class="flex justify-center gap-5 w-full">
+        <p><%= child.name %></p>
+        <p>----</p>
+        <p><%= child.createdAt %></p>
+      </div>
+    </a>
+    <% }) %>
+    <% folder.files.forEach((file) => { %>
+    <div class="flex justify-center gap-5 w-full">
+      <p><%= file.name %></p>
+      <p><%= file.size %></p>
+      <p><%= file.createdAt %></p>
+    </div>
+    <% }) %>
+  </div>
 </div>

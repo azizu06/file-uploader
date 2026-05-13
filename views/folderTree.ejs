@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-2">
+  <% folders.forEach((folder) => { %>
+  <div class="flex flex-col gap-1" data-folder>
+    <div class="flex gap-0.5">
+      <% if(folder.children.length > 0){ %>
+      <button data-folder-toggle type="button">-></button>
+      <% } %>
+      <p class="pl-<%= depth %>"><%= folder.name %></p>
+    </div>
+    <div data-folder-children class="hidden">
+      <%- include("folderTree.ejs", {folders: folder.children, depth: depth+1})
+      %>
+    </div>
+  </div>
+  <% }) %>
+</div>

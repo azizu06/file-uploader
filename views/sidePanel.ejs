@@ -1,0 +1,19 @@
+<div class="flex flex-col gap-2">
+  <button id="folder-modal" class="border rounded-xl p-2">New Folder</button>
+  <button id="file-modal" class="border rounded-xl p-2">New File</button>
+  <div class="flex flex-col gap-0.5">
+    <p><%= user.username %></p>
+    <%- include("folderTree.ejs", {folders: user.folders, depth: 0}) %>
+  </div>
+</div>
+
+<script>
+  const toggles = document.querySelectorAll("[data-folder-toggle]");
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const parent = toggle.closest("[data-folder]");
+      const children = parent.querySelector("[data-folder-children]");
+      children?.classList.toggle("hidden");
+    });
+  });
+</script>
