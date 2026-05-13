@@ -1,0 +1,19 @@
+<div id="edit-modal" class="fixed inset-0 z-50 hidden bg-black/40">
+  <div class="mx-auto mt-32 w-[90%] max-w-md rounded-lg">
+    <div class="flex flex-col gap-3">
+      <div class="flex justify-between">
+        <h1>Edit Folder</h1>
+        <button type="button" id="edit-close">X</button>
+      </div>
+      <form action="" method="post" class="flex flex-col gap-2" id="edit-form">
+        <div class="flex flex-col gap-0.5">
+          <label for="edit-name">Name</label>
+          <input type="text" name="name" id="edit-name" required />
+        </div>
+        <button type="submit" class="flex border rounded-xl p-2 justify-center">
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

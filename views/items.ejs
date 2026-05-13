@@ -1,7 +1,7 @@
 <div class="flex flex-col">
   <% folders.forEach((folder) => { %>
   <div class="flex gap-0.5">
-    <p><%= folder.name %></p>
+    <a href="/folders/<%= folder.id %>"><%= folder.name %></a>
     <p>></p>
   </div>
   <% }) %>
@@ -12,20 +12,99 @@
   </div>
   <div class="flex flex-col gap-2 w-full">
     <% folder.children.forEach((child) => { %>
-    <a href="/folders/<%= folder.id %>">
-      <div class="flex justify-center gap-5 w-full">
-        <p><%= child.name %></p>
-        <p>----</p>
-        <p><%= child.createdAt %></p>
+    <div class="flex justify-between">
+      <a href="/folders/<%= child.id %>">
+        <div class="flex justify-center gap-5 w-full">
+          <p><%= child.name %></p>
+          <p>----</p>
+          <p><%= child.createdAt %></p>
+        </div>
+      </a>
+      <div class="flex gap-1">
+        <button
+          type="button"
+          class="flex border rounded-xl p-2 justify-center"
+          data-edit-folder
+          data-folder-id="<%= child.id %>"
+          data-folder-name="<%= child.name %>"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          class="flex border rounded-xl p-2 justify-center"
+          data-delete-item
+          data-delete-type="Folder"
+          data-item-id="<%= child.id %>"
+        >
+          Delete
+        </button>
       </div>
-    </a>
+    </div>
     <% }) %>
     <% folder.files.forEach((file) => { %>
     <div class="flex justify-center gap-5 w-full">
       <p><%= file.name %></p>
       <p><%= file.size %></p>
       <p><%= file.createdAt %></p>
+      <div class="flex gap-1">
+        <button type="button">Download</button>
+        <button
+          type="button"
+          class="flex border rounded-xl p-2 justify-center"
+          data-delete-item
+          data-delete-type="File"
+          data-item-id="<%= file.id %>"
+        >
+          Delete
+        </button>
+      </div>
     </div>
     <% }) %>
   </div>
+  <%- include("editFolder") %>
+  <%- include("deleteForm") %>
 </div>
+
+<script>
+  const editModal = document.getElementById("edit-modal");
+  const editForm = document.getElementById("edit-form");
+  const editName = document.getElementById("edit-name");
+  const editClose = document.getElementById("edit-close");
+  const editBtns = document.querySelectorAll("[data-edit-folder]");
+  editBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.folderId;
+      const name = btn.dataset.folderName;
+      editForm.action = `/folders/${id}/edit`;
+      editName.value = name;
+      editModal.classList.remove("hidden");
+    });
+  });
+  editClose.addEventListener("click", () => editModal.classList.add("hidden"));
+  const deleteModal = document.getElementById("delete-modal");
+  const deleteForm = document.getElementById("delete-form");
+  const deleteClose = document.getElementById("delete-close");
+  const deleteTitle = document.getElementById("delete-title");
+  const deleteMsg = document.getElementById("delete-message");
+  const deleteBtns = document.querySelectorAll("[data-delete-item]");
+  deleteBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.itemId;
+      const type = btn.dataset.deleteType;
+      deleteTitle.innerText = `Delete ${type}`;
+      if (type === "Folder") {
+        deleteMsg.innerText =
+          "Are you sure you want to delete the current folder and all of its contents?";
+      } else {
+        deleteMsg.innerText =
+          "Are you sure you want to delete the current file?";
+      }
+      deleteForm.action = `/${type.toLowerCase()}s/${id}/delete`;
+      deleteModal.classList.remove("hidden");
+    });
+  });
+  deleteClose.addEventListener("click", () =>
+    deleteModal.classList.add("hidden"),
+  );
+</script>
