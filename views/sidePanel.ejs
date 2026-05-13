@@ -5,6 +5,8 @@
     <p><%= user.username %></p>
     <%- include("folderTree.ejs", {folders: user.folders, depth: 0}) %>
   </div>
+  <%- include("addFolder.ejs") %>
+  <%- include("addFile.ejs") %>
 </div>
 
 <script>
@@ -16,4 +18,18 @@
       children?.classList.toggle("hidden");
     });
   });
+  const folderBtn = document.getElementById("folder-modal");
+  const folderForm = document.getElementById("folder-form");
+  const folderClose = document.getElementById("folder-close");
+  folderBtn.addEventListener("click", () =>
+    folderForm.classList.remove("hidden"),
+  );
+  folderClose.addEventListener("click", () =>
+    folderForm.classList.add("hidden"),
+  );
+  const fileBtn = document.getElementById("file-modal");
+  const fileForm = document.getElementById("file-form");
+  const fileClose = document.getElementById("file-close");
+  fileBtn.addEventListener("click", () => fileForm.classList.remove("hidden"));
+  fileClose.addEventListener("click", () => fileForm.classList.add("hidden"));
 </script>
