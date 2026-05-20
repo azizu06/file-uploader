@@ -1,66 +1,92 @@
-<div class="flex flex-col">
-  <% path.forEach((folder) => { %>
-  <div class="flex gap-0.5">
-    <a href="/folders/<%= folder.id %>"><%= folder.name %></a>
-    <p>></p>
+<div class="content-panel">
+  <div class="content-header">
+    <div>
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/folders/<%= folder.id %>">Home</a>
+        <% path.forEach((folder) => { %>
+        <span aria-hidden="true">/</span>
+        <a href="/folders/<%= folder.id %>"><%= folder.name %></a>
+        <% }) %>
+      </nav>
+      <h1 class="page-title"><%= folder.name %></h1>
+    </div>
+    <div class="sort-group" aria-label="Sort files">
+      <a href="/folders/<%= folder.id %>?sort=name&dir=asc">Name</a>
+      <a href="/folders/<%= folder.id %>?sort=size&dir=asc">Size</a>
+      <a href="/folders/<%= folder.id %>?sort=date&dir=asc">Date Added</a>
+    </div>
   </div>
-  <% }) %>
-  <div class="flex justify-center gap-5">
-    <a href="/folders/<%= folder.id %>?sort=name&dir=asc">Name</a>
-    <a href="/folders/<%= folder.id %>?sort=size&dir=asc">Size</a>
-    <a href="/folders/<%= folder.id %>?sort=date&dir=asc">Date Added</a>
-  </div>
-  <div class="flex flex-col gap-2 w-full">
+  <div class="items-list">
+    <div class="items-header" aria-hidden="true">
+      <span>Name</span>
+      <span>Size</span>
+      <span>Date Added</span>
+      <span>Actions</span>
+    </div>
     <% folder.children.forEach((child) => { %>
-    <div class="flex justify-between">
-      <a href="/folders/<%= child.id %>">
-        <div class="flex justify-center gap-5 w-full">
-          <p><%= child.name %></p>
-          <p>----</p>
-          <p><%= child.createdAt %></p>
-        </div>
+    <div class="item-row">
+      <a href="/folders/<%= child.id %>" class="item-name">
+        <i data-lucide="folder" class="icon folder-icon" aria-hidden="true"></i>
+        <span><%= child.name %></span>
       </a>
-      <div class="flex gap-1">
+      <span class="item-meta">Folder</span>
+      <span class="item-meta"><%= child.createdAt %></span>
+      <div class="row-actions">
         <button
           type="button"
-          class="flex border rounded-xl p-2 justify-center"
+          class="button-ghost"
           data-edit-folder
           data-folder-id="<%= child.id %>"
           data-folder-name="<%= child.name %>"
         >
+          <i data-lucide="pencil" class="icon" aria-hidden="true"></i>
           Edit
         </button>
         <button
           type="button"
-          class="flex border rounded-xl p-2 justify-center"
+          class="button-danger"
           data-delete-item
           data-delete-type="Folder"
           data-item-id="<%= child.id %>"
         >
+          <i data-lucide="trash-2" class="icon" aria-hidden="true"></i>
           Delete
         </button>
       </div>
     </div>
     <% }) %>
     <% folder.files.forEach((file) => { %>
-    <div class="flex justify-center gap-5 w-full">
-      <p><%= file.name %></p>
-      <p><%= file.size %></p>
-      <p><%= file.createdAt %></p>
-      <div class="flex gap-1">
-        <button type="button">Download</button>
+    <div class="item-row">
+      <span class="item-name">
+        <i data-lucide="file" class="icon file-icon" aria-hidden="true"></i>
+        <span><%= file.name %></span>
+      </span>
+      <span class="item-meta"><%= file.size %></span>
+      <span class="item-meta"><%= file.createdAt %></span>
+      <div class="row-actions">
+        <button type="button" class="button-ghost">
+          <i data-lucide="download" class="icon" aria-hidden="true"></i>
+          Download
+        </button>
         <button
           type="button"
-          class="flex border rounded-xl p-2 justify-center"
+          class="button-danger"
           data-delete-item
           data-delete-type="File"
           data-item-id="<%= file.id %>"
         >
+          <i data-lucide="trash-2" class="icon" aria-hidden="true"></i>
           Delete
         </button>
       </div>
     </div>
     <% }) %>
+    <% if(folder.children.length === 0 && folder.files.length === 0){ %>
+    <div class="empty-state">
+      <i data-lucide="folder-open" class="empty-icon" aria-hidden="true"></i>
+      <p>This folder is empty.</p>
+    </div>
+    <% } %>
   </div>
   <%- include("editFolder") %>
   <%- include("deleteForm") %>

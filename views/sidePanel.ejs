@@ -1,8 +1,16 @@
-<div class="flex flex-col gap-2">
-  <button id="folder-modal" class="border rounded-xl p-2">New Folder</button>
-  <button id="file-modal" class="border rounded-xl p-2">New File</button>
-  <div class="flex flex-col gap-0.5">
-    <p><%= user.username %></p>
+<div class="sidebar-panel">
+  <div class="sidebar-actions">
+    <button id="folder-modal" type="button" class="button-primary">
+      <i data-lucide="folder-plus" class="icon" aria-hidden="true"></i>
+      New Folder
+    </button>
+    <button id="file-modal" type="button" class="button-secondary">
+      <i data-lucide="upload" class="icon" aria-hidden="true"></i>
+      New File
+    </button>
+  </div>
+  <div class="folder-panel">
+    <p class="sidebar-user"><%= user.username %></p>
     <%- include("folderTree.ejs", {folders: user.folders, depth: 0}) %>
   </div>
   <%- include("addFolder.ejs") %>

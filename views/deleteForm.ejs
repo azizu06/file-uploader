@@ -1,20 +1,25 @@
-<div id="delete-modal" class="fixed inset-0 z-50 hidden bg-black/40">
-  <div class="mx-auto mt-32 w-[90%] max-w-md rounded-lg">
-    <div class="flex flex-col gap-3">
-      <div class="flex justify-between">
+<div id="delete-modal" class="modal-overlay hidden">
+  <div
+    class="modal-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="delete-title"
+  >
+    <div class="modal-stack">
+      <div class="modal-header">
         <h1 id="delete-title"></h1>
-        <button type="button" id="delete-close">X</button>
-      </div>
-      <form
-        action=""
-        method="post"
-        class="flex flex-col gap-2"
-        id="delete-form"
-      >
-        <p id="delete-message"></p>
-        <button type="submit" class="flex border rounded-xl p-2 justify-center">
-          Confirm
+        <button
+          type="button"
+          id="delete-close"
+          class="icon-button"
+          aria-label="Close"
+        >
+          <i data-lucide="x" class="icon" aria-hidden="true"></i>
         </button>
+      </div>
+      <form action="" method="post" class="form-stack" id="delete-form">
+        <p id="delete-message"></p>
+        <button type="submit" class="button-danger button-full">Confirm</button>
       </form>
     </div>
   </div>

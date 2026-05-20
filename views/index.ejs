@@ -8,9 +8,12 @@
   </head>
   <body>
     <%- include("navbar.ejs") %>
-    <div class="flex w-full">
-      <div class="w-[30vw]"><%- include("sidePanel.ejs") %></div>
-      <div class="w-[70vw]"><%- include("items.ejs", {path, folder}) %></div>
-    </div>
+    <main class="app-shell">
+      <aside class="app-sidebar"><%- include("sidePanel.ejs") %></aside>
+      <section class="app-content" aria-label="Folder contents">
+        <%- include("items.ejs", {path, folder}) %>
+      </section>
+    </main>
+    <%- include("lucide.ejs") %>
   </body>
 </html>

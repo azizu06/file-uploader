@@ -1,18 +1,34 @@
-<div id="edit-modal" class="fixed inset-0 z-50 hidden bg-black/40">
-  <div class="mx-auto mt-32 w-[90%] max-w-md rounded-lg">
-    <div class="flex flex-col gap-3">
-      <div class="flex justify-between">
-        <h1>Edit Folder</h1>
-        <button type="button" id="edit-close">X</button>
-      </div>
-      <form action="" method="post" class="flex flex-col gap-2" id="edit-form">
-        <div class="flex flex-col gap-0.5">
-          <label for="edit-name">Name</label>
-          <input type="text" name="name" id="edit-name" required />
-        </div>
-        <button type="submit" class="flex border rounded-xl p-2 justify-center">
-          Save Changes
+<div id="edit-modal" class="modal-overlay hidden">
+  <div
+    class="modal-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="edit-title"
+  >
+    <div class="modal-stack">
+      <div class="modal-header">
+        <h1 id="edit-title">Edit Folder</h1>
+        <button
+          type="button"
+          id="edit-close"
+          class="icon-button"
+          aria-label="Close"
+        >
+          <i data-lucide="x" class="icon" aria-hidden="true"></i>
         </button>
+      </div>
+      <form action="" method="post" class="form-stack" id="edit-form">
+        <div class="field-group">
+          <label for="edit-name" class="field-label">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="edit-name"
+            class="text-field"
+            required
+          />
+        </div>
+        <button type="submit" class="button-primary">Save Changes</button>
       </form>
     </div>
   </div>
