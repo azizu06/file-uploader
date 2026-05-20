@@ -1,4 +1,7 @@
-<div id="folder-form" class="modal-overlay hidden">
+<div
+  id="folder-form"
+  class="modal-overlay <%= openModal === &quot;addFolder&quot; ? &quot;&quot; : &quot;hidden&quot; %>"
+>
   <div
     class="modal-panel"
     role="dialog"
@@ -17,7 +20,11 @@
           <i data-lucide="x" class="icon" aria-hidden="true"></i>
         </button>
       </div>
-      <form action="/folders/new" method="post" class="form-stack">
+      <form
+        action="/folders/<%= folder.id %>/new-folder"
+        method="post"
+        class="form-stack"
+      >
         <div class="field-group">
           <label for="name" class="field-label">Name</label>
           <input

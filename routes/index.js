@@ -20,9 +20,9 @@ router.post("/sign-up", controller.signUpPost);
 
 router.post("/folders/:id/edit", requireLogin, controller.editFolderPost);
 router.post("/:type/:id/delete", requireLogin, controller.deleteItemPost);
-router.post("/folders/new", requireLogin, controller.addFolderPost);
+router.post("/folders/:id/new-folder", requireLogin, controller.addFolderPost);
 router.post(
-  "/files/new",
+  "/folders/:id/new-file",
   requireLogin,
   upload.single("file"),
   controller.addFilePost,
