@@ -6,6 +6,7 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "./lib/prisma.js";
 import passport from "./config/passport.js";
 import { fileURLToPath } from "node:url";
+import { router } from "./routes/index.js";
 
 const __filename = fileURLToPath(import.meta.ur);
 const __dirname = path.join(__filename);
@@ -35,5 +36,6 @@ app.use((req, res, next) => {
 });
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+app.use("/", router);
 
 export { app };

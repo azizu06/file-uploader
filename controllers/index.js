@@ -120,6 +120,6 @@ export const controller = {
   logoutPost,
   addFilePost,
   editFolderPost,
-  addFolder,
+  addFolderPost,
   deleteItemPost,
 };
