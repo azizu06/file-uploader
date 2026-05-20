@@ -1,7 +1,7 @@
-import { body, validationResult, matchedData } from "express-validator";
+import { body, validationResult } from "express-validator";
 import { db } from "../db/queries.js";
 import bcrypt from "bcryptjs";
-import passport from "../config/passport.js";
+import { passport } from "../config/passport.js";
 import { validateLogin, validateSignUp, validateFolder } from "./validators.js";
 
 const homeGet = async (req, res) => {
@@ -17,20 +17,21 @@ const homeGet = async (req, res) => {
   res.render("index", { folder, path });
 };
 
-const signUpGet = async (req, res) => res.render("login");
+const signUpGet = async (req, res) => res.render("signUp");
 const signUpPost = [
   validateSignUp,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res
+      return res
         .status(400)
         .render("signUp", { errors: errors.array(), old: req.body });
     }
     try {
-      const { password } = req.body;
+      const { password, username } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
-      await db.addUser(req.body, password);
+      await db.addUser(username, hashedPassword);
+      res.redirect("/folders");
     } catch (err) {
       if (err.code === "23505")
         return res.status(409).render("signUp", {
@@ -48,7 +49,7 @@ const loginPost = [
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res
+      return res
         .status(400)
         .render("signUp", { errors: errors.array(), old: req.body });
     }
@@ -61,7 +62,7 @@ const loginPost = [
         });
       req.login(user, (err) => {
         if (err) return next(err);
-        return (res, redirect("/"));
+        return res.redirect("/folders");
       });
     })(req, res, next);
   },

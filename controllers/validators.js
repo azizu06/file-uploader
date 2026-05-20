@@ -10,7 +10,7 @@ export const validateSignUp = [
   body("password")
     .isLength({ min: 8, max: 50 })
     .withMessage("Password must be between 8 and 50 characters."),
-  body("confrimPassword")
+  body("confirmPassword")
     .custom((value, { req }) => value === req.body.password)
     .withMessage("Passwords do not match"),
 ];

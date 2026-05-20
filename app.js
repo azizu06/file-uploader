@@ -4,12 +4,12 @@ import express from "express";
 import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "./lib/prisma.js";
-import passport from "./config/passport.js";
+import { passport } from "./config/passport.js";
 import { fileURLToPath } from "node:url";
 import { router } from "./routes/index.js";
 
-const __filename = fileURLToPath(import.meta.ur);
-const __dirname = path.join(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 
 app.set("views", path.join(__dirname, "views"));

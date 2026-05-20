@@ -7,7 +7,8 @@ const getUserByUsername = async (username) =>
 
 const getUserById = async (id) => prisma.user.findUnique({ where: { id } });
 
-const addUser = async (data, password) => prisma.create({ data, password });
+const addUser = async (username, password) =>
+  prisma.user.create({ data: { username, password } });
 
 const addFolder = async (data) => prisma.folder.create({ data });
 
