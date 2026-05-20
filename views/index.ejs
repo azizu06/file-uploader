@@ -10,7 +10,7 @@
     <%- include("navbar.ejs") %>
     <div class="flex w-full">
       <div class="w-[30vw]"><%- include("sidePanel.ejs") %></div>
-      <div class="w-[70vw]"><%- include("items.ejs") %></div>
+      <div class="w-[70vw]"><%- include("items.ejs", {path, folder}) %></div>
     </div>
   </body>
 </html>
