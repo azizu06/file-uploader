@@ -576,6 +576,16 @@ a:active {
   width: min(100%, 480px);
 }
 
+.app-main-narrow > .error-list {
+  width: 100%;
+  margin-top: 8px;
+  margin-bottom: 18px;
+}
+
+.app-main-narrow > .error-list + .form-panel {
+  margin-top: 0;
+}
+
 .form-panel {
   margin-top: 18px;
   padding: 22px;

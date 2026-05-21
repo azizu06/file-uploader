@@ -6,7 +6,7 @@ import { validateLogin, validateSignUp } from "./validators.js";
 
 const indexGet = async (req, res) => {
   if (!req.user) return res.redirect("/login");
-  const root = await db.getRoot(req.user.id);
+  const root = await db.ensureRoot(req.user.id, req.user.username);
   res.redirect(`/folders/${root.id}`);
 };
 
@@ -57,7 +57,7 @@ const loginPost = [
         });
       req.login(user, async (err) => {
         if (err) return next(err);
-        const folder = await db.getRoot(user.id);
+        const folder = await db.ensureRoot(user.id, user.username);
         return res.redirect(`/folders/${folder.id}`);
       });
     })(req, res, next);

@@ -1,4 +1,6 @@
 import multer from "multer";
+import os from "node:os";
+import path from "node:path";
 import {
   controller,
   requireLogin,
@@ -9,7 +11,7 @@ const router = Router();
 import { db } from "../db/queries.js";
 
 const upload = multer({
-  dest: "uploads/",
+  dest: path.join(os.tmpdir(), "uploads"),
   limits: {
     fileSize: 10 * 1024 * 1024,
   },

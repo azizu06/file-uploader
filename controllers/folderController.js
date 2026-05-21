@@ -85,6 +85,7 @@ const editFolderPost = [
         openModal: "editFolder",
       });
     }
+    const root = await db.getRoot(req.user.id);
     const folder = await db.getFolder(Number(id), req.user.id);
     if (!folder) {
       return renderFolderErrorPage(req, res, {
@@ -92,6 +93,14 @@ const editFolderPost = [
         status: 404,
         errors: [{ msg: "Folder does not exist." }],
         openModal: "editFolder",
+      });
+    }
+    if (root && folder.id === root.id) {
+      return renderFolderErrorPage(req, res, {
+        folder,
+        status: 400,
+        errors: [{ msg: "The root folder cannot be renamed." }],
+        openModal: null,
       });
     }
     try {

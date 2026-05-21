@@ -101,8 +101,18 @@ const getRoot = async (userId) =>
     },
   });
 
+const ensureRoot = async (userId, name) => {
+  const root = await getRoot(userId);
+  if (root) return root;
+
+  return prisma.folder.create({
+    data: { userId, name },
+  });
+};
+
 export const db = {
   getRoot,
+  ensureRoot,
   getCurDirectory,
   getFolder,
   getAllFolders,

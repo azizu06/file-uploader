@@ -34,6 +34,9 @@ export const renderFolderErrorPage = async (
 };
 
 export const buildTree = async (userId) => {
+  const rootFolder = await db.getRoot(userId);
+  if (!rootFolder) return [];
+
   const allFolders = await db.getAllFolders(userId);
   let parentToChild = {};
   allFolders.forEach((folder) => {
@@ -44,5 +47,6 @@ export const buildTree = async (userId) => {
   allFolders.forEach((folder) => {
     folder.children = parentToChild[folder.id] || [];
   });
-  return parentToChild[null] || [];
+  const root = allFolders.find((folder) => folder.id === rootFolder.id);
+  return root ? [root] : [];
 };
