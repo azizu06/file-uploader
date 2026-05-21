@@ -1,5 +1,6 @@
 import { db } from "../db/queries.js";
 import { renderFolderErrorPage } from "./helpers.js";
+import { supabase, supabaseBucket } from "../lib/supabase.js";
 
 const deleteItemPost = async (req, res) => {
   const { id, type } = req.params;
@@ -27,6 +28,16 @@ const deleteItemPost = async (req, res) => {
       openModal: null,
     });
   }
+  const { error } = await supabase.storage
+    .from(supabaseBucket)
+    .remove([file.storageKey]);
+  if (error)
+    return renderFolderErrorPage(req, res, {
+      folder: null,
+      status: 500,
+      errors: [{ msg: "File removal failed." }],
+      openModal: null,
+    });
   await db.deleteFile(Number(id), req.user.id);
   res.redirect(`/folders/${file.folderId}`);
 };

@@ -35,12 +35,14 @@ const uploadSingle = (req, res, next) => {
   });
 };
 
+router.get("/", controller.indexGet);
 router.get("/folders/:id", requireLogin, controller.homeGet);
 router.get("/files/:id", requireLogin, controller.fileGet);
 router.get("/files/:id/download", requireLogin, controller.fileDownloadGet);
 
 router.get("/login", controller.loginGet);
 router.post("/login", controller.loginPost);
+router.get("/logout", controller.logoutPost);
 
 router.get("/sign-up", controller.signUpGet);
 router.post("/sign-up", controller.signUpPost);

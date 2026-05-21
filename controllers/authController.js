@@ -4,6 +4,12 @@ import { passport } from "../config/passport.js";
 import { db } from "../db/queries.js";
 import { validateLogin, validateSignUp } from "./validators.js";
 
+const indexGet = async (req, res) => {
+  if (!req.user) return res.redirect("/login");
+  const root = await db.getRoot(req.user.id);
+  res.redirect(`/folders/${root.id}`);
+};
+
 const signUpGet = async (req, res) => res.render("signUp");
 
 const signUpPost = [
@@ -61,7 +67,7 @@ const loginPost = [
 const logoutPost = async (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
-    res.redirect("login");
+    res.redirect("/login");
   });
 };
 
@@ -79,4 +85,5 @@ export const authController = {
   loginGet,
   loginPost,
   logoutPost,
+  indexGet,
 };
