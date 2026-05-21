@@ -310,6 +310,10 @@ a:active {
   border-bottom: 1px solid var(--border);
 }
 
+.content-header > :first-child {
+  min-width: 0;
+}
+
 .breadcrumbs {
   display: flex;
   flex-wrap: wrap;
@@ -336,6 +340,7 @@ a:active {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 
@@ -434,10 +439,15 @@ a:active {
 }
 
 .row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.items-list .row-actions {
   display: grid;
   grid-template-columns: 112px 76px;
   justify-content: end;
-  gap: 8px;
 }
 
 .button-primary,
@@ -519,6 +529,10 @@ a:active {
 
 .file-detail-panel {
   overflow: hidden;
+}
+
+.file-detail-panel .content-header .row-actions {
+  flex: 0 0 auto;
 }
 
 .file-detail-list {
@@ -822,9 +836,14 @@ input[type="file"].text-field::file-selector-button {
   }
 
   .row-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .items-list .row-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: stretch;
-    width: 100%;
   }
 
   .file-detail-row {
@@ -858,6 +877,10 @@ input[type="file"].text-field::file-selector-button {
   }
 
   .row-actions {
+    grid-template-columns: none;
+  }
+
+  .items-list .row-actions {
     grid-template-columns: 1fr;
   }
 

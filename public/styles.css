@@ -421,6 +421,9 @@ button:active, a:active {
   padding: 22px 24px;
   border-bottom: 1px solid var(--border);
 }
+.content-header > :first-child {
+  min-width: 0;
+}
 .breadcrumbs {
   display: flex;
   flex-wrap: wrap;
@@ -444,6 +447,7 @@ button:active, a:active {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
   text-wrap: balance;
 }
 .sort-group {
@@ -524,10 +528,14 @@ button:active, a:active {
   font-variant-numeric: tabular-nums;
 }
 .row-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.items-list .row-actions {
   display: grid;
   grid-template-columns: 112px 76px;
   justify-content: end;
-  gap: 8px;
 }
 .button-primary, .button-secondary, .button-ghost, .button-danger {
   justify-content: center;
@@ -590,6 +598,9 @@ button:active, a:active {
 }
 .file-detail-panel {
   overflow: hidden;
+}
+.file-detail-panel .content-header .row-actions {
+  flex: 0 0 auto;
 }
 .file-detail-list {
   display: grid;
@@ -843,9 +854,13 @@ input[type="file"].text-field::file-selector-button {
     padding: 14px 12px;
   }
   .row-actions {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .items-list .row-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-content: stretch;
-    width: 100%;
   }
   .file-detail-row {
     grid-template-columns: 1fr;
@@ -870,6 +885,9 @@ input[type="file"].text-field::file-selector-button {
     display: grid;
   }
   .row-actions {
+    grid-template-columns: none;
+  }
+  .items-list .row-actions {
     grid-template-columns: 1fr;
   }
   .button-primary, .button-secondary, .button-ghost, .button-danger {
