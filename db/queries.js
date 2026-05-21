@@ -24,12 +24,14 @@ const addFolder = async ({ name, userId, parentId }) =>
     },
   });
 
-const editFolder = async (id, data) =>
-  prisma.folder.update({ where: { id }, data });
+const editFolder = async (id, userId, data) =>
+  prisma.folder.updateMany({ where: { id, userId }, data });
 
-const getFolder = async (id) => prisma.folder.findUnique({ where: { id } });
+const getFolder = async (id, userId) =>
+  prisma.folder.findFirst({ where: { id, userId } });
 
-const deleteFolder = async (id) => prisma.folder.delete({ where: { id } });
+const deleteFolder = async (id, userId) =>
+  prisma.folder.deleteMany({ where: { id, userId } });
 
 const addFile = async ({ name, storageKey, mimeType, size, folderId }) =>
   prisma.file.create({
@@ -42,12 +44,14 @@ const addFile = async ({ name, storageKey, mimeType, size, folderId }) =>
     },
   });
 
-const deleteFile = async (id) => prisma.file.delete({ where: { id } });
+const deleteFile = async (id, userId) =>
+  prisma.file.deleteMany({ where: { id, folder: { userId } } });
 
-const getFile = async (id) => prisma.file.findUnique({ where: { id } });
+const getFile = async (id, userId) =>
+  prisma.file.findFirst({ where: { id, folder: { userId } } });
 
 const getCurDirectory = async (id, userId) =>
-  prisma.folder.findUnique({
+  prisma.folder.findFirst({
     where: { id, userId },
     include: {
       children: true,

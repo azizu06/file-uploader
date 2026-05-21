@@ -4,13 +4,12 @@ import bcrypt from "bcryptjs";
 import { passport } from "../config/passport.js";
 import { validateLogin, validateSignUp, validateFolder } from "./validators.js";
 
-const buildPath = async (folder) => {
-  if (!folder) return null;
+export const buildPath = async (folder, userId) => {
   let path = [];
   let curFolder = folder;
   while (curFolder.parentId) {
     path.push(curFolder);
-    curFolder = await db.getFolder(curFolder.parentId);
+    curFolder = await db.getFolder(curFolder.parentId, userId);
   }
   return path.reverse();
 };
@@ -27,7 +26,7 @@ const homeGet = async (req, res) => {
       openModal: null,
     });
   }
-  const path = await buildPath(folder);
+  const path = await buildPath(folder, req.user.id);
   res.render("index", { folder, path, openModal: null });
 };
 
@@ -91,6 +90,17 @@ const logoutPost = async (req, res, next) => {
 };
 
 const addFilePost = async (req, res) => {
+  if (!req.file) {
+    const { id } = req.params;
+    const folder = await db.getCurDirectory(Number(id), req.user.id);
+    const path = await buildPath(folder, req.user.id);
+    return res.status(400).render("index", {
+      folder,
+      path,
+      errors: [{ msg: "No file uploaded" }],
+      openModal: "file",
+    });
+  }
   const { id } = req.params;
   const fileData = {
     name: req.file.originalname,
@@ -110,7 +120,7 @@ const addFolderPost = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const folder = await db.getCurDirectory(Number(id), req.user.id);
-      const path = await buildPath(folder);
+      const path = await buildPath(folder, req.user.id);
       return res.status(400).render("index", {
         errors: errors.array(),
         old: req.body,
@@ -136,7 +146,7 @@ const editFolderPost = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const folder = await db.getCurDirectory(Number(id), req.user.id);
-      const path = await buildPath(folder);
+      const path = await buildPath(folder, req.user.id);
       return res.status(400).render("index", {
         errors: errors.array(),
         old: req.body,
@@ -145,8 +155,18 @@ const editFolderPost = [
         openModal: "editFolder",
       });
     }
-    const folder = await db.editFolder(Number(id), req.body);
-    const parentFolder = await db.getFolder(folder.parentId);
+    const folder = await db.getFolder(Number(id), req.user.id);
+    if (!folder) {
+      const rootFolder = await db.getRoot(req.user.id);
+      return res.status(404).render("index", {
+        folder: rootFolder,
+        errors: [{ msg: "Folder does not exist." }],
+        path: [],
+        openModal: "editFolder",
+      });
+    }
+    await db.editFolder(Number(id), req.user.id, req.body);
+    const parentFolder = await db.getFolder(folder.parentId, req.user.id);
     res.redirect(`/folders/${parentFolder.id}`);
   },
 ];
@@ -154,12 +174,32 @@ const editFolderPost = [
 const deleteItemPost = async (req, res) => {
   const { id, type } = req.params;
   if (type === "folders") {
-    await db.deleteFolder(Number(id));
-    const folder = await db.getRoot(req.user.id);
-    return res.redirect(`/folders/${folder.id}`);
+    const folder = await db.getFolder(Number(id), req.user.id);
+    if (!folder) {
+      const rootFolder = await db.getRoot(req.user.id);
+      return res.status(404).render("index", {
+        folder: rootFolder,
+        errors: [{ msg: "Folder does not exist." }],
+        path: [],
+        openModal: "delete",
+      });
+    }
+    await db.deleteFolder(Number(id), req.user.id);
+    const rootFolder = await db.getRoot(req.user.id);
+    return res.redirect(`/folders/${rootFolder.id}`);
   }
-  const file = await db.getFile(id);
-  await db.deleteFile(id);
+
+  const file = await db.getFile(Number(id), req.user.id);
+  if (!file) {
+    const rootFolder = await db.getRoot(req.user.id);
+    return res.status(404).render("index", {
+      folder: rootFolder,
+      errors: [{ msg: "File does not exist." }],
+      path: [],
+      openModal: "delete",
+    });
+  }
+  await db.deleteFile(Number(id), req.user.id);
   res.redirect(`/folders/${file.folderId}`);
 };
 

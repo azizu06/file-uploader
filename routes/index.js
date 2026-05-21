@@ -1,7 +1,8 @@
 import multer from "multer";
-import { controller, requireLogin } from "../controllers/index.js";
+import { controller, requireLogin, buildPath } from "../controllers/index.js";
 import { Router } from "express";
 const router = Router();
+import { db } from "../db/queries.js";
 
 const upload = multer({
   dest: "uploads/",
@@ -9,6 +10,27 @@ const upload = multer({
     fileSize: 5 * 1024 * 1024,
   },
 });
+
+const uploadSingle = (req, res, next) => {
+  upload.single("file")(req, res, async (err) => {
+    if (err) {
+      const msg =
+        err.code === "LIMIT_FILE_SIZE"
+          ? "File has to be less than 5MB"
+          : "File upload failed";
+      const { id } = req.params;
+      const folder = await db.getCurDirectory(Number(id), req.user.id);
+      const path = await buildPath(folder, req.user.id);
+      return res.status(400).render("index", {
+        folder,
+        path,
+        errors: [{ msg }],
+        openModal: "file",
+      });
+    }
+    next();
+  });
+};
 
 router.get("/folders/:id", requireLogin, controller.homeGet);
 
@@ -24,7 +46,7 @@ router.post("/folders/:id/new-folder", requireLogin, controller.addFolderPost);
 router.post(
   "/folders/:id/new-file",
   requireLogin,
-  upload.single("file"),
+  uploadSingle,
   controller.addFilePost,
 );
 
