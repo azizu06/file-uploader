@@ -24,8 +24,8 @@ const signUpPost = [
     try {
       const { password, username } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
-      const folder = await db.addUser(username, hashedPassword);
-      res.redirect(`/folders/${folder.id}`);
+      await db.addUser(username, hashedPassword);
+      res.redirect("/login");
     } catch (err) {
       if (err.code === "P2002")
         return res.status(409).render("signUp", {
