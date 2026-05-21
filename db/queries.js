@@ -5,7 +5,28 @@ const getUserByUsername = async (username) =>
     where: { username },
   });
 
-const getUserById = async (id) => prisma.user.findUnique({ where: { id } });
+const folderTreeInclude = {
+  children: {
+    include: {
+      children: {
+        include: {
+          children: true,
+        },
+      },
+    },
+  },
+};
+
+const getUserById = async (id) =>
+  prisma.user.findUnique({
+    where: { id },
+    include: {
+      folders: {
+        where: { parentId: null },
+        include: folderTreeInclude,
+      },
+    },
+  });
 
 const addUser = async (username, password) => {
   const user = await prisma.user.create({ data: { username, password } });
