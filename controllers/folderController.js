@@ -5,23 +5,28 @@ import { validateFolder } from "./validators.js";
 
 const homeGet = async (req, res) => {
   const { id } = req.params;
-  const folder = await db.getCurDirectory(Number(id), req.user.id);
+  const { sort, dir } = req.query;
+  const getNextDir = (field) =>
+    sort === field && dir === "asc" ? "desc" : "asc";
+
+  const folder = await db.getCurDirectory(Number(id), req.user.id, sort, dir);
   if (!folder) {
     return renderFolderErrorPage(req, res, {
       folder: null,
       status: 404,
       errors: [{ msg: "Folder does not exist." }],
       openModal: null,
+      getNextDir,
     });
   }
   const root = await buildTree(req.user.id);
   const path = await buildPath(folder, req.user.id);
-  res.render("index", { folder, path, openModal: null, root });
+  res.render("index", { folder, path, openModal: null, root, getNextDir });
 };
 
 const addFolderPost = [
   validateFolder,
-  async (req, res) => {
+  async (req, res, next) => {
     const { id } = req.params;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -48,14 +53,26 @@ const addFolderPost = [
         openModal: "addFolder",
       });
     }
-    await db.addFolder(folderData);
-    res.redirect(`/folders/${id}`);
+    try {
+      await db.addFolder(folderData);
+      res.redirect(`/folders/${id}`);
+    } catch (err) {
+      if (err.code === "P2002")
+        return renderFolderErrorPage(req, res, {
+          folder,
+          status: 400,
+          errors: [{ msg: "A folder with that name already exists." }],
+          old: req.body,
+          openModal: "addFolder",
+        });
+      next(err);
+    }
   },
 ];
 
 const editFolderPost = [
   validateFolder,
-  async (req, res) => {
+  async (req, res, next) => {
     const { id } = req.params;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -77,8 +94,20 @@ const editFolderPost = [
         openModal: "editFolder",
       });
     }
-    await db.editFolder(Number(id), req.user.id, req.body);
-    res.redirect(`/folders/${id}`);
+    try {
+      await db.editFolder(Number(id), req.user.id, req.body);
+      res.redirect(`/folders/${id}`);
+    } catch (err) {
+      if (err.code === "P2002")
+        return renderFolderErrorPage(req, res, {
+          folder,
+          status: 400,
+          errors: [{ msg: "A folder with that name already exists." }],
+          old: req.body,
+          openModal: "editFolder",
+        });
+      next(err);
+    }
   },
 ];
 

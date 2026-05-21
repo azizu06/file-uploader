@@ -17,7 +17,7 @@ const fileGet = async (req, res) => {
   res.render("fileDetail", { file });
 };
 
-const addFilePost = async (req, res) => {
+const addFilePost = async (req, res, next) => {
   if (!req.file) {
     const { id } = req.params;
     const folder = await db.getCurDirectory(Number(id), req.user.id);
@@ -62,8 +62,20 @@ const addFilePost = async (req, res) => {
       openModal: "addFile",
     });
   }
-  await db.addFile(fileData);
-  res.redirect(`/folders/${id}`);
+  try {
+    await db.addFile(fileData);
+    res.redirect(`/folders/${id}`);
+  } catch (err) {
+    await supabase.storage.from(supabaseBucket).remove([storagePath]);
+    if (err.code === "P2002")
+      return renderFolderErrorPage(req, res, {
+        folder,
+        status: 400,
+        errors: [{ msg: "A file with that name already exists." }],
+        openModal: "addFile",
+      });
+    next(err);
+  }
 };
 
 const fileDownloadGet = async (req, res) => {

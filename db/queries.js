@@ -11,6 +11,13 @@ const getAllFolders = async (userId) =>
     orderBy: { createdAt: "asc" },
   });
 
+const getAllFoldersWithFiles = async (userId) =>
+  prisma.folder.findMany({
+    where: { userId },
+    include: { files: true },
+    orderBy: { createdAt: "asc" },
+  });
+
 const getUserById = async (id) =>
   prisma.user.findUnique({
     where: { id },
@@ -59,14 +66,31 @@ const deleteFile = async (id, userId) =>
 const getFile = async (id, userId) =>
   prisma.file.findFirst({ where: { id, folder: { userId } } });
 
-const getCurDirectory = async (id, userId) =>
-  prisma.folder.findFirst({
+const getCurDirectory = async (id, userId, sort, dir) => {
+  const fileSortFields = {
+    name: "name",
+    size: "size",
+    date: "createdAt",
+  };
+  const fileSort = fileSortFields[sort] || "name";
+  const sortDir = dir === "desc" ? "desc" : "asc";
+  const folderSort = sort === "date" ? "createdAt" : "name";
+  return prisma.folder.findFirst({
     where: { id, userId },
     include: {
-      children: true,
-      files: true,
+      children: {
+        orderBy: {
+          [folderSort]: sortDir,
+        },
+      },
+      files: {
+        orderBy: {
+          [fileSort]: sortDir,
+        },
+      },
     },
   });
+};
 
 const getRoot = async (userId) =>
   prisma.folder.findFirst({
@@ -91,4 +115,5 @@ export const db = {
   getUserById,
   getUserByUsername,
   addUser,
+  getAllFoldersWithFiles,
 };

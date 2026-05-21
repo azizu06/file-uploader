@@ -13,9 +13,12 @@ export const buildPath = async (folder, userId) => {
 export const renderFolderErrorPage = async (
   req,
   res,
-  { folder, status, errors, openModal = null, old },
+  { folder, status, errors, openModal = null, old, getNextDir = () => "asc" },
 ) => {
-  const pageFolder = folder || (await db.getRoot(req.user.id));
+  const { sort, dir } = req.query;
+  const pageFolder = folder
+    ? await db.getCurDirectory(folder.id, req.user.id, sort, dir)
+    : await db.getRoot(req.user.id);
   const path = folder ? await buildPath(folder, req.user.id) : [];
   const root = await buildTree(req.user.id);
 
@@ -26,6 +29,7 @@ export const renderFolderErrorPage = async (
     old,
     openModal,
     root,
+    getNextDir,
   });
 };
 

@@ -14,6 +14,35 @@ const deleteItemPost = async (req, res) => {
         openModal: null,
       });
     }
+    let deleteIds = new Set([folder.id]);
+    let found = true;
+    const allFolders = await db.getAllFoldersWithFiles(req.user.id);
+    while (found) {
+      found = false;
+      allFolders.forEach((folder) => {
+        if (deleteIds.has(folder.parentId) && !deleteIds.has(folder.id)) {
+          found = true;
+          deleteIds.add(folder.id);
+        }
+      });
+    }
+    const storageKeys = allFolders
+      .filter((folder) => deleteIds.has(folder.id))
+      .flatMap((folder) => folder.files)
+      .map((file) => file.storageKey);
+
+    if (storageKeys.length > 0) {
+      const { error } = await supabase.storage
+        .from(supabaseBucket)
+        .remove(storageKeys);
+      if (error)
+        return renderFolderErrorPage(req, res, {
+          folder: null,
+          status: 500,
+          errors: [{ msg: "File removal failed." }],
+          openModal: null,
+        });
+    }
     await db.deleteFolder(Number(id), req.user.id);
     const rootFolder = await db.getRoot(req.user.id);
     return res.redirect(`/folders/${rootFolder.id}`);

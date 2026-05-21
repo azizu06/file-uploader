@@ -27,7 +27,7 @@ const signUpPost = [
       const folder = await db.addUser(username, hashedPassword);
       res.redirect(`/folders/${folder.id}`);
     } catch (err) {
-      if (err.code === "23505")
+      if (err.code === "P2002")
         return res.status(409).render("signUp", {
           errors: [{ msg: "Username already exists" }],
           old: req.body,
