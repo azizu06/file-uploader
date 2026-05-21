@@ -71,3 +71,4 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", router);
 
 export { app };
+export default app;
