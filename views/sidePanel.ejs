@@ -24,6 +24,14 @@
       const parent = toggle.closest("[data-folder]");
       const children = parent.querySelector("[data-folder-children]");
       children?.classList.toggle("hidden");
+      const isOpen = children && !children.classList.contains("hidden");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      toggle
+        .querySelector("[data-folder-icon-closed]")
+        ?.classList.toggle("hidden", isOpen);
+      toggle
+        .querySelector("[data-folder-icon-open]")
+        ?.classList.toggle("hidden", !isOpen);
     });
   });
   const folderBtn = document.getElementById("folder-modal");
