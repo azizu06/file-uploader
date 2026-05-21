@@ -48,7 +48,7 @@ const deleteItemPost = async (req, res) => {
         return renderFolderErrorPage(req, res, {
           folder: null,
           status: 500,
-          errors: [{ msg: "File removal failed." }],
+          errors: [{ msg: "Folder removal failed." }],
           openModal: null,
         });
     }
