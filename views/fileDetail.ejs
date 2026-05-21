@@ -38,10 +38,7 @@
           </div>
           <div class="file-detail-row">
             <dt>Size</dt>
-            <dd>
-              <%= file.size %>
-              bytes
-            </dd>
+            <dd><%= formatFileSize(file.size) %></dd>
           </div>
           <div class="file-detail-row">
             <dt>Uploaded</dt>

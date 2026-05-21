@@ -24,6 +24,24 @@ const formatDate = (value) => {
   return dateFormatter.format(date);
 };
 
+const formatFileSize = (value) => {
+  const bytes = Number(value);
+  if (!Number.isFinite(bytes)) return "Unknown";
+  if (bytes < 1024) return `${bytes} B`;
+
+  const units = ["KB", "MB", "GB", "TB"];
+  let size = bytes / 1024;
+  let unitIndex = 0;
+
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex += 1;
+  }
+
+  const rounded = size >= 10 ? Math.round(size) : Math.round(size * 10) / 10;
+  return `${rounded} ${units[unitIndex]}`;
+};
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(
@@ -45,6 +63,7 @@ app.use(passport.session());
 app.use((req, res, next) => {
   res.locals.user = req.user;
   res.locals.formatDate = formatDate;
+  res.locals.formatFileSize = formatFileSize;
   next();
 });
 app.use(express.static(path.join(__dirname, "public")));

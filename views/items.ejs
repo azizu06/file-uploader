@@ -11,9 +11,18 @@
       <h1 class="page-title"><%= folder.name %></h1>
     </div>
     <div class="sort-group" aria-label="Sort files">
-      <a href="/folders/<%= folder.id %>?sort=name&dir=asc">Name</a>
-      <a href="/folders/<%= folder.id %>?sort=size&dir=asc">Size</a>
-      <a href="/folders/<%= folder.id %>?sort=date&dir=asc">Date Added</a>
+      <a
+        href="/folders/<%= folder.id %>?sort=name&dir=<%= getNextDir('name') %>"
+        >Name</a
+      >
+      <a
+        href="/folders/<%= folder.id %>?sort=size&dir=<%= getNextDir('size') %>"
+        >Size</a
+      >
+      <a
+        href="/folders/<%= folder.id %>?sort=date&dir=<%= getNextDir('date') %>"
+        >Date Added</a
+      >
     </div>
   </div>
   <div class="items-list">
@@ -34,7 +43,7 @@
       <div class="row-actions">
         <button
           type="button"
-          class="button-ghost"
+          class="button-ghost row-action-main"
           data-edit-folder
           data-folder-id="<%= child.id %>"
           data-folder-name="<%= child.name %>"
@@ -44,7 +53,7 @@
         </button>
         <button
           type="button"
-          class="button-danger"
+          class="button-danger row-action-delete"
           data-delete-item
           data-delete-type="Folder"
           data-item-id="<%= child.id %>"
@@ -61,16 +70,19 @@
         <i data-lucide="file" class="icon file-icon" aria-hidden="true"></i>
         <a href="/files/<%= file.id %>"><%= file.name %></a>
       </span>
-      <span class="item-meta"><%= file.size %></span>
+      <span class="item-meta"><%= formatFileSize(file.size) %></span>
       <span class="item-meta"><%= formatDate(file.createdAt) %></span>
       <div class="row-actions">
-        <a class="button-ghost" href="/files/<%= file.id %>/download">
+        <a
+          class="button-ghost row-action-main"
+          href="/files/<%= file.id %>/download"
+        >
           <i data-lucide="download" class="icon" aria-hidden="true"></i>
           Download
         </a>
         <button
           type="button"
-          class="button-danger"
+          class="button-danger row-action-delete"
           data-delete-item
           data-delete-type="File"
           data-item-id="<%= file.id %>"
