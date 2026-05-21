@@ -59,7 +59,7 @@
     <div class="item-row">
       <span class="item-name">
         <i data-lucide="file" class="icon file-icon" aria-hidden="true"></i>
-        <span><%= file.name %></span>
+        <a href="/files/<%= file.id %>"><%= file.name %></a>
       </span>
       <span class="item-meta"><%= file.size %></span>
       <span class="item-meta"><%= file.createdAt %></span>

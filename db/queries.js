@@ -62,6 +62,10 @@ const getCurDirectory = async (id, userId) =>
 const getRoot = async (userId) =>
   prisma.folder.findFirst({
     where: { userId, parentId: null },
+    include: {
+      children: true,
+      files: true,
+    },
   });
 
 export const db = {

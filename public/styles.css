@@ -563,6 +563,35 @@ button:active, a:active {
   height: 34px;
   color: var(--accent);
 }
+.file-detail-panel {
+  overflow: hidden;
+}
+.file-detail-list {
+  display: grid;
+  padding: 8px;
+}
+.file-detail-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.35fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+.file-detail-row:first-child {
+  border-top-color: transparent;
+}
+.file-detail-row dt {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+.file-detail-row dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-weight: 560;
+}
 .app-main {
   width: min(100%, 960px);
   margin: 0 auto;
@@ -729,6 +758,11 @@ input[type="file"].text-field::file-selector-button {
   .row-actions {
     justify-content: flex-start;
     flex-wrap: wrap;
+  }
+  .file-detail-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 12px;
   }
   .item-meta {
     white-space: normal;

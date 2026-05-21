@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles.css" />
+    <title><%= file.name %></title>
+  </head>
+  <body>
+    <%- include("navbar.ejs") %>
+    <main class="app-main">
+      <div class="content-panel file-detail-panel">
+        <div class="content-header">
+          <div>
+            <nav class="breadcrumbs" aria-label="Breadcrumb">
+              <a href="/folders/<%= file.folderId %>">Folder</a>
+              <span aria-hidden="true">/</span>
+              <span><%= file.name %></span>
+            </nav>
+            <h1 class="page-title"><%= file.name %></h1>
+          </div>
+          <div class="row-actions">
+            <a href="/folders/<%= file.folderId %>" class="button-secondary">
+              <i data-lucide="arrow-left" class="icon" aria-hidden="true"></i>
+              Back
+            </a>
+            <a href="/files/<%= file.id %>/download" class="button-primary">
+              <i data-lucide="download" class="icon" aria-hidden="true"></i>
+              Download
+            </a>
+          </div>
+        </div>
+
+        <dl class="file-detail-list">
+          <div class="file-detail-row">
+            <dt>Name</dt>
+            <dd><%= file.name %></dd>
+          </div>
+          <div class="file-detail-row">
+            <dt>Size</dt>
+            <dd>
+              <%= file.size %>
+              bytes
+            </dd>
+          </div>
+          <div class="file-detail-row">
+            <dt>Uploaded</dt>
+            <dd><%= file.createdAt %></dd>
+          </div>
+          <div class="file-detail-row">
+            <dt>Type</dt>
+            <dd><%= file.mimeType || "Unknown" %></dd>
+          </div>
+        </dl>
+      </div>
+    </main>
+    <%- include("lucide.ejs") %>
+  </body>
+</html>

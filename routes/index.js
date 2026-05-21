@@ -1,5 +1,9 @@
 import multer from "multer";
-import { controller, requireLogin, buildPath } from "../controllers/index.js";
+import {
+  controller,
+  requireLogin,
+  renderFolderErrorPage,
+} from "../controllers/index.js";
 import { Router } from "express";
 const router = Router();
 import { db } from "../db/queries.js";
@@ -20,12 +24,11 @@ const uploadSingle = (req, res, next) => {
           : "File upload failed";
       const { id } = req.params;
       const folder = await db.getCurDirectory(Number(id), req.user.id);
-      const path = await buildPath(folder, req.user.id);
-      return res.status(400).render("index", {
+      return renderFolderErrorPage(req, res, {
         folder,
-        path,
+        status: 400,
         errors: [{ msg }],
-        openModal: "file",
+        openModal: "addFile",
       });
     }
     next();
@@ -33,6 +36,7 @@ const uploadSingle = (req, res, next) => {
 };
 
 router.get("/folders/:id", requireLogin, controller.homeGet);
+router.get("/files/:id", requireLogin, controller.fileGet);
 
 router.get("/login", controller.loginGet);
 router.post("/login", controller.loginPost);
