@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import { db } from "../db/queries.js";
-import { buildPath, renderFolderErrorPage } from "./helpers.js";
+import { buildPath, renderFolderErrorPage, buildTree } from "./helpers.js";
 import { validateFolder } from "./validators.js";
 
 const homeGet = async (req, res) => {
@@ -14,8 +14,9 @@ const homeGet = async (req, res) => {
       openModal: null,
     });
   }
+  const root = await buildTree(req.user.id);
   const path = await buildPath(folder, req.user.id);
-  res.render("index", { folder, path, openModal: null });
+  res.render("index", { folder, path, openModal: null, root });
 };
 
 const addFolderPost = [

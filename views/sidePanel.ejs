@@ -11,7 +11,7 @@
   </div>
   <div class="folder-panel">
     <p class="sidebar-user"><%= user.username %></p>
-    <%- include("folderTree.ejs", {folders: user.folders, depth: 0}) %>
+    <%- include("folderTree.ejs", {folders: root, depth: 0}) %>
   </div>
   <%- include("addFolder.ejs") %>
   <%- include("addFile.ejs") %>

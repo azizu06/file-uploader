@@ -17,6 +17,7 @@ export const renderFolderErrorPage = async (
 ) => {
   const pageFolder = folder || (await db.getRoot(req.user.id));
   const path = folder ? await buildPath(folder, req.user.id) : [];
+  const root = await buildTree(req.user.id);
 
   return res.status(status).render("index", {
     folder: pageFolder,
@@ -24,5 +25,20 @@ export const renderFolderErrorPage = async (
     errors,
     old,
     openModal,
+    root,
   });
+};
+
+export const buildTree = async (userId) => {
+  const allFolders = await db.getAllFolders(userId);
+  let parentToChild = {};
+  allFolders.forEach((folder) => {
+    if (!(folder.parentId in parentToChild))
+      parentToChild[folder.parentId] = [];
+    parentToChild[folder.parentId].push(folder);
+  });
+  allFolders.forEach((folder) => {
+    folder.children = parentToChild[folder.id] || [];
+  });
+  return parentToChild[null] || [];
 };

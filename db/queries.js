@@ -5,27 +5,15 @@ const getUserByUsername = async (username) =>
     where: { username },
   });
 
-const folderTreeInclude = {
-  children: {
-    include: {
-      children: {
-        include: {
-          children: true,
-        },
-      },
-    },
-  },
-};
+const getAllFolders = async (userId) =>
+  prisma.folder.findMany({
+    where: { userId },
+    orderBy: { createdAt: "asc" },
+  });
 
 const getUserById = async (id) =>
   prisma.user.findUnique({
     where: { id },
-    include: {
-      folders: {
-        where: { parentId: null },
-        include: folderTreeInclude,
-      },
-    },
   });
 
 const addUser = async (username, password) => {
@@ -93,6 +81,7 @@ export const db = {
   getRoot,
   getCurDirectory,
   getFolder,
+  getAllFolders,
   addFile,
   getFile,
   addFolder,
