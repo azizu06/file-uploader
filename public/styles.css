@@ -416,10 +416,12 @@ button:active, a:active {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 7px;
-  margin-bottom: 8px;
-  color: var(--text-muted);
-  font-size: 13px;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #4e5a51;
+  font-size: 14px;
+  font-weight: 560;
+  line-height: 1.4;
 }
 .breadcrumbs a:hover, .text-link:hover {
   color: var(--accent-hover);
@@ -469,9 +471,9 @@ button:active, a:active {
 .items-header {
   min-height: 38px;
   padding: 0 14px;
-  color: var(--text-muted);
+  color: #516052;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 750;
 }
 .item-row {
   min-height: 58px;
@@ -500,8 +502,10 @@ button:active, a:active {
   white-space: nowrap;
 }
 .item-meta {
-  color: var(--text-muted);
-  font-size: 13px;
+  color: #536257;
+  font-size: 14px;
+  font-weight: 540;
+  font-variant-numeric: tabular-nums;
 }
 .row-actions {
   display: flex;
@@ -608,10 +612,10 @@ button:active, a:active {
   display: grid;
 }
 .form-stack {
-  gap: 14px;
+  gap: 16px;
 }
 .field-group {
-  gap: 7px;
+  gap: 9px;
 }
 .field-label {
   color: var(--text);
@@ -647,6 +651,58 @@ input[type="file"].text-field::file-selector-button {
   cursor: pointer;
   font: inherit;
   font-weight: 600;
+}
+.file-upload-control {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+.file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+.file-picker-button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 680;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+.file-picker-button:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-muted);
+}
+.file-input:focus-visible + .file-picker-button {
+  outline: 3px solid rgba(124, 159, 134, 0.35);
+  outline-offset: 2px;
+}
+.file-upload-name {
+  min-width: 0;
+  overflow: hidden;
+  color: #3f4b42;
+  font-size: 14px;
+  font-weight: 560;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .form-footer {
   display: flex;

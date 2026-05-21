@@ -2,7 +2,7 @@
   <div class="content-header">
     <div>
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/folders/<%= folder.id %>">Home</a>
+        <a href="/"><%= user.username %></a>
         <% path.forEach((folder) => { %>
         <span aria-hidden="true">/</span>
         <a href="/folders/<%= folder.id %>"><%= folder.name %></a>
@@ -30,7 +30,7 @@
         <span><%= child.name %></span>
       </a>
       <span class="item-meta">Folder</span>
-      <span class="item-meta"><%= child.createdAt %></span>
+      <span class="item-meta"><%= formatDate(child.createdAt) %></span>
       <div class="row-actions">
         <button
           type="button"
@@ -62,12 +62,12 @@
         <a href="/files/<%= file.id %>"><%= file.name %></a>
       </span>
       <span class="item-meta"><%= file.size %></span>
-      <span class="item-meta"><%= file.createdAt %></span>
+      <span class="item-meta"><%= formatDate(file.createdAt) %></span>
       <div class="row-actions">
-        <button type="button" class="button-ghost">
+        <a class="button-ghost" href="/files/<%= file.id %>/download">
           <i data-lucide="download" class="icon" aria-hidden="true"></i>
           Download
-        </button>
+        </a>
         <button
           type="button"
           class="button-danger"
