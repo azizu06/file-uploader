@@ -1,5 +1,7 @@
 import { db } from "../db/queries.js";
 import { renderFolderErrorPage } from "./helpers.js";
+import { supabase, supabaseBucket } from "../lib/supabase.js";
+import fs from "node:fs/promises";
 
 const fileGet = async (req, res) => {
   const { id } = req.params;
@@ -27,13 +29,6 @@ const addFilePost = async (req, res) => {
     });
   }
   const { id } = req.params;
-  const fileData = {
-    name: req.file.originalname,
-    storageKey: req.file.filename,
-    mimeType: req.file.mimetype,
-    size: req.file.size,
-    folderId: Number(id),
-  };
   const folder = await db.getFolder(Number(id), req.user.id);
   if (!folder) {
     return renderFolderErrorPage(req, res, {
@@ -43,11 +38,62 @@ const addFilePost = async (req, res) => {
       openModal: "addFile",
     });
   }
+  const storagePath = `users/${req.user.id}/folders/${id}/${req.file.filename}`;
+  const fileData = {
+    name: req.file.originalname,
+    storageKey: storagePath,
+    mimeType: req.file.mimetype,
+    size: req.file.size,
+    folderId: Number(id),
+  };
+  const fileBuffer = await fs.readFile(req.file.path);
+  const { error } = await supabase.storage
+    .from(supabaseBucket)
+    .upload(storagePath, fileBuffer, {
+      contentType: req.file.mimetype,
+      upsert: false,
+    });
+  await fs.unlink(req.file.path).catch(() => {});
+  if (error) {
+    return renderFolderErrorPage(req, res, {
+      folder,
+      status: 500,
+      errors: [{ msg: "File upload failed." }],
+      openModal: "addFile",
+    });
+  }
   await db.addFile(fileData);
   res.redirect(`/folders/${id}`);
+};
+
+const fileDownloadGet = async (req, res) => {
+  const { id } = req.params;
+  const file = await db.getFile(Number(id), req.user.id);
+  if (!file) {
+    return renderFolderErrorPage(req, res, {
+      folder: null,
+      status: 404,
+      errors: [{ msg: "File does not exist." }],
+      openModal: null,
+    });
+  }
+  const folder = await db.getFolder(file.folderId, req.user.id);
+  const { data, error } = await supabase.storage
+    .from(supabaseBucket)
+    .createSignedUrl(file.storageKey, 60);
+  if (error) {
+    return renderFolderErrorPage(req, res, {
+      folder,
+      status: 500,
+      errors: [{ msg: "Download failed." }],
+      openModal: null,
+    });
+  }
+  res.redirect(data.signedUrl);
 };
 
 export const fileController = {
   fileGet,
   addFilePost,
+  fileDownloadGet,
 };

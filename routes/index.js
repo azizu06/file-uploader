@@ -11,7 +11,7 @@ import { db } from "../db/queries.js";
 const upload = multer({
   dest: "uploads/",
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: 10 * 1024 * 1024,
   },
 });
 
@@ -20,7 +20,7 @@ const uploadSingle = (req, res, next) => {
     if (err) {
       const msg =
         err.code === "LIMIT_FILE_SIZE"
-          ? "File has to be less than 5MB"
+          ? "File has to be less than 10MB"
           : "File upload failed";
       const { id } = req.params;
       const folder = await db.getCurDirectory(Number(id), req.user.id);
@@ -37,6 +37,7 @@ const uploadSingle = (req, res, next) => {
 
 router.get("/folders/:id", requireLogin, controller.homeGet);
 router.get("/files/:id", requireLogin, controller.fileGet);
+router.get("/files/:id/download", requireLogin, controller.fileDownloadGet);
 
 router.get("/login", controller.loginGet);
 router.post("/login", controller.loginPost);
