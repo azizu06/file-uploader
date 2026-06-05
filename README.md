@@ -6,9 +6,7 @@ personal "storage device" on the web.
 
 ## Preview
 
-> **TODO — add a screenshot.** Running locally requires a PostgreSQL database, a Supabase
-> storage bucket, and session config (see below), so a live capture isn't included yet.
-> Once running, capture the file/folder view to `docs/assets/preview.png`.
+![File Uploader preview](docs/assets/preview.png)
 
 ## Features
 
